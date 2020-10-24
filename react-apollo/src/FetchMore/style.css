@@ -1,0 +1,22 @@
+.fetchmore__end {
+  margin-top: 2rem;
+  font-size: 1.6rem;
+  color: #666;
+}
+
+.fetchmore__btn {
+  margin-top: 2rem;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: 1.6rem;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
+}
+
+.fetchmore__btn:hover {
+  background-color: #389e0d;
+}
