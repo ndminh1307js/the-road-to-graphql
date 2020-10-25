@@ -2,48 +2,67 @@ import React from 'react';
 
 import FetchMore from '../../FetchMore';
 import RepositoryItem from '../RepositoryItem';
+import Issues from '../../Issue';
 
 import '../style.css';
 
-const updateQuery = (previousResult, { fetchMoreResult }) => {
+const getUpdateQuery = (entry) => (
+  previousResult,
+  { fetchMoreResult }
+) => {
   if (!fetchMoreResult) {
     return previousResult;
   }
 
   return {
     ...previousResult,
-    viewer: {
-      ...previousResult.viewer,
+    [entry]: {
+      ...previousResult[entry],
       repositories: {
-        ...previousResult.viewer.repositories,
-        ...fetchMoreResult.viewer.repositories,
+        ...previousResult[entry].repositories,
+        ...fetchMoreResult[entry].repositories,
         edges: [
-          ...previousResult.viewer.repositories.edges,
-          ...fetchMoreResult.viewer.repositories.edges
+          ...previousResult[entry].repositories.edges,
+          ...fetchMoreResult[entry].repositories.edges
         ]
       }
     }
   }
 }
 
-const RepositoryList = ({ repositories, fetchMore, loading }) => (
-  <div className='repository-list'>
-    {repositories.edges.map(({ node }) => (
-      <RepositoryItem key={node.id} {...node} />
-    ))}
+const RepositoryList = ({
+  repositories,
+  fetchMore,
+  loading,
+  entry
+}) => (
+    <div className='repository-list'>
+      {repositories.edges.map(({ node }) => (
+        <div
+          className='repository-list__item'
+          key={node.id}
+        >
+          <RepositoryItem {...node} />
 
-    <FetchMore
-      loading={loading}
-      hasNextPage={repositories.pageInfo.hasNextPage}
-      variables={{
-        cursor: repositories.pageInfo.endCursor
-      }}
-      updateQuery={updateQuery}
-      fetchMore={fetchMore}
-    >
-      More Repositories
+          <Issues
+            repositoryName={node.name}
+            repositoryOwner={node.owner.login}
+          />
+        </div>
+      ))}
+
+      <FetchMore
+        loading={loading}
+        hasNextPage={repositories.pageInfo.hasNextPage}
+        variables={{
+          cursor: repositories.pageInfo.endCursor
+        }}
+        updateQuery={getUpdateQuery(entry)}
+        fetchMore={fetchMore}
+      >
+        More Repositories
     </FetchMore>
-  </div>
-)
+    </div>
+  )
 
 export default RepositoryList;
