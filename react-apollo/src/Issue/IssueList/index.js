@@ -8,6 +8,7 @@ import Button from '../../Button';
 import Loading from '../../Loading';
 import ErrorMesssage from '../../Error';
 import FetchMore from '../../FetchMore';
+import Comments from '../../Comment';
 
 import './style.css';
 
@@ -133,7 +134,6 @@ const Issues = ({
             }
 
             const { repository } = data;
-            console.log(repository.issues);
 
             const filteredRepository = {
               issues: {
@@ -150,6 +150,8 @@ const Issues = ({
 
             return (
               <IssueList
+                repositoryName={repositoryName}
+                repositoryOwner={repositoryOwner}
                 issues={filteredRepository.issues}
                 loading={loading}
                 fetchMore={fetchMore}
@@ -171,6 +173,7 @@ const IssueFilter = ({
       {client => (
         <Button
           className='issues__filter-btn'
+          color='gray'
           onClick={() => onChangeIssueState(TRANSITION_STATES[issueState])}
           onMouseOver={() => prefetchIssues(
             client,
@@ -185,25 +188,41 @@ const IssueFilter = ({
     </ApolloConsumer>
   )
 
-const IssueList = ({ issues, loading, fetchMore }) => (
-  <div className='issue-list'>
-    {issues.edges.map(({ node }) => (
-      <IssueItem key={node.id} issue={node} />
-    ))}
+const IssueList = ({
+  repositoryName,
+  repositoryOwner,
+  issues,
+  loading,
+  fetchMore
+}) => (
+    <div className='issue-list'>
+      {issues.edges.map(({ node }) => (
+        <div
+          className='issue-list__item'
+          key={node.id}
+        >
+          <IssueItem issue={node} />
+          <Comments
+            repositoryName={repositoryName}
+            repositoryOwner={repositoryOwner}
+            issue={node}
+          />
+        </div>
+      ))}
 
-    <FetchMore
-      loading={loading}
-      hasNextPage={issues.pageInfo.hasNextPage}
-      variables={{
-        cursor: issues.pageInfo.endCursor
-      }}
-      updateQuery={updateQuery}
-      fetchMore={fetchMore}
-    >
-      More Issues
+      <FetchMore
+        loading={loading}
+        hasNextPage={issues.pageInfo.hasNextPage}
+        variables={{
+          cursor: issues.pageInfo.endCursor
+        }}
+        updateQuery={updateQuery}
+        fetchMore={fetchMore}
+      >
+        More Issues
     </FetchMore>
-  </div>
-)
+    </div>
+  )
 
 export default withState(
   'issueState',

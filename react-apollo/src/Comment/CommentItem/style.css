@@ -1,0 +1,15 @@
+.comment-item {
+  margin-top: 0.5rem;
+  padding: 0.5rem 2rem;
+  border-top: 1px solid #666;
+}
+
+.comment-item__date {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.comment-item__author {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
