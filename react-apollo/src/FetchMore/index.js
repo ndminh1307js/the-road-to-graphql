@@ -12,7 +12,7 @@ const FetchMore = ({
 }) => {
   if (!hasNextPage) {
     return <p className='fetchmore__end'>
-      End Of Repositories
+      End Of Results
     </p>
   }
 

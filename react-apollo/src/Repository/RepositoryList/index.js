@@ -61,7 +61,7 @@ const RepositoryList = ({
         fetchMore={fetchMore}
       >
         More Repositories
-    </FetchMore>
+      </FetchMore>
     </div>
   )
 
